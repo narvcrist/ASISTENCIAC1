@@ -141,7 +141,81 @@ function VerificarCorreo($direccion){
 				}else{
 					return 1;
 				}
-		}	
+        }
+//combo para obtener Personas
+function cmb_persona($PER_SECUENCIAL = null, $attr = null){		
+	$sql = "select PER_SECUENCIAL,PER_APELLIDOS,PER_NOMBRES,PER_CEDULA 
+			from PERSONA 
+			where PER_ESTADO=0 
+			order by PER_APELLIDOS ASC";
+	$results = $this->db->query($sql)->result_array();
+	$output = array();
+	if (count($results) > 0) {
+		$output[null] = "Persona...";
+		foreach ($results as $result) {
+			$output[$result['PER_SECUENCIAL']] = utf8_encode($result['PER_APELLIDOS'])." ".utf8_encode($result['PER_NOMBRES'])." -- ".utf8_encode($result['PER_CEDULA']);
+		}
+		return form_dropdown('persona', $output, $PER_SECUENCIAL, $attr);
+   } else {
+		return alerta("No Posee Personas. <input type='hidden' name='persona' value='' />");
+	}
+}
+//combo para obtener MATERIA
+function cmb_materia($MAT_SECUENCIAL = null, $attr = null){
+		
+	$sql = "select MAT_SECUENCIAL,MAT_NOMBRE 
+				from MATERIA 
+				WHERE MAT_ESTADO=0 
+				ORDER BY MAT_NOMBRE ASC";
+	$results = $this->db->query($sql)->result_array();
+	$output = array();
+	if (count($results) > 0) {
+		$output[null] = "Materia...";
+		foreach ($results as $result) {
+			$output[$result['MAT_SECUENCIAL']] = utf8_encode($result['MAT_NOMBRE']);
+		}
+		return form_dropdown('materia', $output, $MAT_SECUENCIAL, $attr);
+   } else {
+		return alerta("No Posee Materias. <input type='hidden' name='materia' value='' />");
+	}
+}
+//combo para obtener HORARIOS
+function cmb_horario($HOR_SECUENCIAL = null, $attr = null){
+		
+	$sql = "select HOR_SECUENCIAL, HOR_DIA, HOR_HORAINICIO, HOR_HORAFIN 
+				from HORARIO 
+				WHERE HOR_ESTADO=0 
+				ORDER BY HOR_DIA ASC";
+	$results = $this->db->query($sql)->result_array();
+	$output = array();
+	if (count($results) > 0) {
+		$output[null] = "Horario...";
+		foreach ($results as $result) {
+			$output[$result['HOR_SECUENCIAL']] = utf8_encode($result['HOR_DIA']);
+		}
+		return form_dropdown('horario', $output, $MAT_SECUENCIAL, $attr);
+   } else {
+		return alerta("No Posee Horarios. <input type='hidden' name='horario' value='' />");
+	}
+}	
+function cmb_jornada($JOR_SECUENCIAL = null, $attr = null){
+		
+	$sql = "select JOR_SECUENCIAL,JOR_NOMBRE 
+			from JORNADA 
+			WHERE JOR_ESTADO=0 
+			ORDER BY JOR_NOMBRE ASC";
+	$results = $this->db->query($sql)->result_array();
+	$output = array();
+	if (count($results) > 0) {
+		$output[null] = "Jornada...";
+		foreach ($results as $result) {
+			$output[$result['JOR_SECUENCIAL']] = utf8_encode($result['JOR_NOMBRE']);
+		}
+		return form_dropdown('jornada', $output, $JOR_SECUENCIAL, $attr);
+   } else {
+		return alerta("No Posee Jornadas. <input type='hidden' name='jornada' value='' />");
+	}
+}
 	
 }
 ?>

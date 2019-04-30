@@ -1,0 +1,182 @@
+<?php
+class Mhorario extends CI_Model {
+   
+   //Funcion en la cual muestra cada seleccion que ingresemos
+   function getdatosItems(){
+        $datos = new stdClass();
+        $consulta=$_POST['_search'];
+        $numero= $this->input->post('numero');
+        $datos->econdicion ='HOR_ESTADO<>1';
+		$user=$this->session->userdata('US_CODIGO');
+                
+            //  if (!empty($numero)){
+            //      $datos->econdicion .=" AND HOR_SECUENCIAL=$numero";              
+			//  }
+              $datos->campoId = "ROWNUM";
+			   $datos->camposelect = array("ROWNUM",
+											"HOR_SECUENCIAL",
+                                            "(SELECT CONCAT(CONCAT(PER_APELLIDOS,' '), PER_NOMBRES) FROM PERSONA WHERE PER_SECUENCIAL = HOR_SEC_PERSONA)
+                                            HOR_SEC_PERSONA",
+											"(select MAT_NOMBRE FROM materia WHERE MAT_SECUENCIAL=HOR_SEC_MATERIA) HOR_SEC_MATERIA",
+											"HOR_FECHAINGRESO",
+											"to_char(HOR_HORA_INICIO,'DD-MM-YYY HH24:MI:SS') HOR_HORA_INICIO",
+                                            "to_char(HOR_HORA_FIN,'DD-MM-YYY HH24:MI:SS') HOR_HORA_FIN",
+											"(CASE HOR_DIA
+											WHEN 'Lu' THEN 'Lunes'
+											WHEN 'Ma' THEN 'Martes'
+											WHEN 'Mi' THEN 'Miercoles'
+											WHEN 'Ju' THEN 'Jueves'
+											WHEN 'Vi' THEN 'Viernes'
+											WHEN 'Sa' THEN 'Sabado'
+											WHEN 'Do' THEN 'Domingo'
+											END) HOR_DIA",
+											"HOR_RESPONSABLE",
+											"HOR_ESTADO");
+			  $datos->campos = array( "ROWNUM",
+                                            "HOR_SECUENCIAL",
+                                            "HOR_SEC_PERSONA",
+                                            "HOR_SEC_MATERIA",
+                                            "HOR_FECHAINGRESO",
+                                            "HOR_HORA_INICIO",
+                                            "HOR_HORA_FIN",
+                                            "HOR_DIA",
+                                            "HOR_RESPONSABLE",
+                                            "HOR_ESTADO");
+			  $datos->tabla="HORARIO";
+              $datos->debug = false;	
+           return $this->jqtabla->finalizarTabla($this->jqtabla->getTabla($datos), $datos);
+   }
+   //Datos que seran enviados para la edicion o visualizacion de cada registro seleccionado
+   function dataHorario($numero){
+       $sql="select
+                HOR_SECUENCIAL,
+                HOR_SEC_PERSONA,
+                HOR_SEC_MATERIA,
+                HOR_FECHAINGRESO,
+                to_char(HOR_HORA_INICIO,'DD-MM-YYY HH24:MI:SS') HOR_HORA_INICIO,
+                to_char(HOR_HORA_FIN,'DD-MM-YYY HH24:MI:SS') HOR_HORA_FIN,
+                HOR_DIA,
+                HOR_RESPONSABLE,
+                HOR_ESTADO
+          FROM HORARIO WHERE HOR_SECUENCIAL=$numero";
+         $sol=$this->db->query($sql)->row();
+         if ( count($sol)==0){
+                $sql="select
+                            HOR_SECUENCIAL,
+                            HOR_SEC_PERSONA,
+                            HOR_SEC_MATERIA,
+                            HOR_FECHAINGRESO,
+                            HOR_HORA_INICIO,
+                            HOR_HORA_FIN,
+                            HOR_DIA,
+                            HOR_RESPONSABLE,
+                            HOR_ESTADO
+                          FROM HORA WHERE HOR_SECUENCIAL=$numero";
+                         $sol=$this->db->query($sql)->row();
+						}
+          return $sol;
+		}	
+	//funcion para crear un nuevo reporte o cabecera
+    function agrHorario(){
+			$sql="select to_char(SYSDATE,'MM/DD/YYYY HH24:MI:SS') FECHA from dual";		
+			$conn = $this->db->conn_id;
+			$stmt = oci_parse($conn,$sql);
+			oci_execute($stmt);
+			$nsol=oci_fetch_row($stmt);
+			oci_free_statement($stmt);            
+            $HOR_FECHAINGRESO="TO_DATE('".$nsol[0]."','MM/DD/YYYY HH24:MI:SS')";
+            $HOR_RESPONSABLE= $this->session->userdata('US_CODIGO');
+            $HOR_HORA_INICIO= "TO_DATE('".$nsol[0]."','MM/DD/YYYY HH24:MI:SS')";
+            $HOR_HORA_FIN= "TO_DATE('".$nsol[0]."','MM/DD/YYYY HH24:MI:SS')";
+		
+			//VARIABLES DE INGRESO
+			
+			$HOR_SEC_PERSONA=$this->input->post('persona');
+            $HOR_SEC_MATERIA=prepCampoAlmacenar($this->input->post('materia'));
+            $HORA_INICIO=prepCampoAlmacenar($this->input->post('HOR_HORA_INICIO')); 
+            $HORA_FIN=prepCampoAlmacenar($this->input->post('HOR_HORA_FIN'));
+            $HOR_DIA=prepCampoAlmacenar($this->input->post('dia'));	
+        
+			$sqlHORARIOVALIDA="select count(*) NUM_HORARIO from HORARIO WHERE HOR_SEC_PERSONA='{$HOR_SEC_PERSONA }' and HOR_ESTADO=0";
+			$NUM_HORARIO =$this->db->query($sqlHORARIOVALIDA)->row()->NUM_HORARIO ;
+			if($NUM_HORARIO ==0){
+                $sql="INSERT INTO HORARIO (
+                    HOR_SEC_PERSONA,
+                    HOR_SEC_MATERIA,
+                    HOR_FECHAINGRESO,
+                    HOR_HORA_INICIO,
+                    HOR_HORA_FIN,
+                    HOR_DIA,
+                    HOR_RESPONSABLE,
+                    HOR_ESTADO) VALUES (
+                    $HOR_SEC_PERSONA,
+                    $HOR_SEC_MATERIA,
+                    $HOR_FECHAINGRESO,
+                    $HOR_HORA_INICIO,
+                    $HOR_HORA_FIN,
+                    '$HOR_DIA',
+                    '$HOR_RESPONSABLE', 
+                    0)";
+				$this->db->query($sql);
+				//print_r($sql);
+				$HOR_SECUENCIAL=$this->db->query("select max(HOR_SECUENCIAL) SECUENCIAL from HORARIO")->row()->SECUENCIAL;
+				echo json_encode(array("cod"=>$HOR_SECUENCIAL,"numero"=>$HOR_SECUENCIAL,"mensaje"=>"Horario: ".$HOR_SECUENCIAL.", insertado con éxito"));    
+			}else{
+				echo json_encode(array("cod"=>1,"numero"=>1,"mensaje"=>"!!!...El Horario Ya Existe...!!!"));
+			}
+			    
+    }
+	//funcion para editar un registro selccionado
+    function editHorario(){
+			$HOR_SECUENCIAL=$this->input->post('HOR_SECUENCIAL');
+			
+            //VARIABLES DE INGRESO
+            
+			$HOR_SEC_PERSONA=$this->input->post('persona');
+            $HOR_SEC_MATERIA=$this->input->post('materia');	
+            $HORA_INICIO=prepCampoAlmacenar($this->input->post('HOR_HORA_INICIO'));
+            $HOR_HORA_INICIO="TO_DATE('".$HORA_INICIO."','DD/MM/YYYY HH24:MI:SS')";
+            $HORA_FIN=prepCampoAlmacenar($this->input->post('HOR_HORA_FIN'));	
+            $HOR_HORA_FIN="TO_DATE('".$HORA_FIN."','DD/MM/YYYY HH24:MI:SS')";			
+            $HOR_DIA=prepCampoAlmacenar($this->input->post('dia'));		
+            
+
+            $sqlREPETICION1="select HOR_SECUENCIAL,HOR_SEC_MATERIA 
+							from horario
+							where HOR_SECUENCIAL='{$HOR_SECUENCIAL}'
+							and hor_estado=0";
+			$repe1 =$this->db->query($sqlREPETICION1)->row();
+			
+			$sqlREPETICION2="select HOR_SECUENCIAL,HOR_SEC_MATERIA 
+							from horario
+							where HOR_SEC_MATERIA='{$HOR_SEC_MATERIA}'
+							and hor_estado=0";
+			$repe2 =$this->db->query($sqlREPETICION2)->row();
+
+			$sqlREPETICION="select count(*) NUM_REPETICION
+							from horario
+							where HOR_SEC_MATERIA='{$HOR_SEC_MATERIA}'
+							and hor_estado=0";
+			$NUM_REPETICION =$this->db->query($sqlREPETICION)->row()->NUM_REPETICION;
+			
+		if(($repe1->HOR_SECUENCIAL==$repe2->HOR_SECUENCIAL) or ($NUM_REPETICION==0)){
+
+				$sql="UPDATE HORARIO SET
+							HOR_SEC_PERSONA=$HOR_SEC_PERSONA,
+                            HOR_SEC_MATERIA=$HOR_SEC_MATERIA,
+							HOR_HORA_INICIO=$HOR_HORA_INICIO,
+                            HOR_HORA_FIN=$HOR_HORA_FIN,
+							HOR_DIA='$HOR_DIA'
+                            
+                 WHERE HOR_SECUENCIAL=$HOR_SECUENCIAL";
+                $this->db->query($sql);
+               //print_r($sql);
+		 $HOR_SECUENCIAL=$this->db->query("select max(HOR_SECUENCIAL) SECUENCIAL from HORARIO")->row()->SECUENCIAL;
+		 echo json_encode(array("cod"=>$HOR_SECUENCIAL,"numero"=>$HOR_SECUENCIAL,"mensaje"=>"Horario: ".$HOR_SECUENCIAL.", editado con éxito"));    
+	}else{     
+		 echo json_encode(array("cod"=>1,"numero"=>1,"mensaje"=>"!!!...El Horario Ya Existe...!!!"));
+     }
+     
+    } 
+}
+?>

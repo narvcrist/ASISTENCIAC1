@@ -51,6 +51,8 @@
 							<li><a href="#">Administración</a> 
 								<ul>
 									<li> <a id="e_estudiante" title="Administración de Estudiantes" name="persona/index"  class="cabecera-links" href="#">Estudiantes</a></li>
+									<li> <a id="e_horario" title="Administración de Horarios" name="horario/index"  class="cabecera-links" href="#">Horarios</a></li>
+									<li> <a id="e_perxjor" title="Administración de persona por jornada" name="perxjor/index"  class="cabecera-links" href="#">Personas por jornadas</a></li>
 								</ul>
 							</li>	
 						<?php } ?>
