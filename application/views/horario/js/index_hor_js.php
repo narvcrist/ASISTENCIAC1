@@ -7,7 +7,7 @@ jQuery(document).ready(function(){
     jQuery("#itemhor").jqGrid({
           url:"horario/getdatosItems",
           datatype: "json",
-          colNames:['Num','Sec.','Persona','Materia','Fecha Ing.','Hora In.','Hora Fin',
+          colNames:['Num','Sec.','Persona','Materia','Fecha Ing.','Hora Inicio','Hora Fin',
                     'Dia','Responsable','Estado'],
           colModel:[
 					{name:'COLUMNAS',index:'COLUMNAS',align:"center",width:30,hidden:false},

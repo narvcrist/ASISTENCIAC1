@@ -51,7 +51,7 @@ class Mperxjor extends CI_Model {
     function agrPerxjor(){	
 			//VARIABLES DE INGRESO
             $PERXJOR_SEC_JORNADA=$this->input->post('jornada');
-            $PERXJOR_SEC_JORNADA=$this->input->post('persona');	
+            $PERXJOR_SEC_PERSONA=$this->input->post('persona');	
 
 			//validación...
 			$sqlREPETICION="select count(*) NUM_PERSONAXJORNADA 

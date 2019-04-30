@@ -24,7 +24,7 @@
 						<?php if($accion=='n'|$accion=='e') : ?>                    
                             
                              <td align="center" colspan="6" class="noclass">
-                                <button title="Verifique la información antes de guardar." id="co_grabar" type="submit" ><img src="./imagenes/guardar.png" width="17" height="17"/>Grabar Licencia</button>
+                                <button title="Verifique la información antes de guardar." id="co_grabar" type="submit" ><img src="./imagenes/guardar.png" width="17" height="17"/>Grabar Jornada</button>
                              </td>
                     
 						<?php endif; ?>

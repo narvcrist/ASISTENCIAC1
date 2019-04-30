@@ -140,7 +140,7 @@ class Mhorario extends CI_Model {
             $HOR_HORA_FIN="TO_DATE('".$HORA_FIN."','DD/MM/YYYY HH24:MI:SS')";			
             $HOR_DIA=prepCampoAlmacenar($this->input->post('dia'));		
             
-
+            
             $sqlREPETICION1="select HOR_SECUENCIAL,HOR_SEC_MATERIA 
 							from horario
 							where HOR_SECUENCIAL='{$HOR_SECUENCIAL}'
