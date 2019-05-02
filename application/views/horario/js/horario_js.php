@@ -33,7 +33,7 @@ var today = new Date();
     }
 
 
-jQuery("#HOR_HORA_INICIO,#HOR_HORA_FIN").datetimepicker({
+jQuery("#HOR_HORAINICIO,#HOR_HORAFIN").datetimepicker({
         dateFormat: 'dd-mm-yy',
         timeFormat: 'hh:mm:ss'
   	//beforeShow: rangoFecha
@@ -100,8 +100,8 @@ $("#fhorario").validate({
        },  //submit handler
        rules:{
         
-			"HOR_HORA_INICIO":{required:true},
-			"HOR_HORA_FIN":{required:true},
+			"HOR_HORAINICIO":{required:true},
+			"HOR_HORAFIN":{required:true},
 			dia:{required:true},
             persona:{required:true},
             materia:{required:true}		
