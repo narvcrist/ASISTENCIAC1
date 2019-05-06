@@ -49,14 +49,14 @@ class Horario extends CI_Controller{
 	function datos($sol,$accion){
         if ($accion=='n') {
             $datos['combo_persona']=$this->mvarios->cmb_persona(null," style='width:800px;' id='HOR_SEC_PERSONA'");
-            $datos['combo_materia']=$this->mvarios->cmb_materia(null,null," style='width:100px;' id='HOR_SEC_MATERIA'");
+            $datos['combo_materia']=$this->mvarios->cmb_materia(null,null," style='width:800px;' id='HOR_SEC_MATERIA'");
 			$datos['combo_dia']=$this->cmb_dia(null," style='width:100px;' id='HOR_DIA'");
             //$datos=null;
 		} else {
             $HOR_SEC_PERSONA=$sol->HOR_SEC_PERSONA;
             $datos['combo_persona']=$this->mvarios->cmb_persona($HOR_SEC_PERSONA," style='width:800px;' id='HOR_SEC_PERSONA'");  
             $materia=$sol->HOR_SEC_MATERIA;
-            $datos['combo_materia']=$this->mvarios->cmb_materia($materia,$sol->HOR_SEC_MATERIA," style='width:500px;' id='HOR_SEC_MATERIA'");
+            $datos['combo_materia']=$this->mvarios->cmb_materia($materia,$sol->HOR_SEC_MATERIA," style='width:800px;' id='HOR_SEC_MATERIA'");
             $dia=$sol->HOR_DIA;
 			$datos['combo_dia']=$this->cmb_dia($dia,$sol->HOR_DIA," style='width:100px;' id='HOR_DIA'");
 			//$datos=null;

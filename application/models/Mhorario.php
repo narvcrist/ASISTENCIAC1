@@ -19,17 +19,9 @@ class Mhorario extends CI_Model {
                                             HOR_SEC_PERSONA",
 											"(select MAT_NOMBRE FROM materia WHERE MAT_SECUENCIAL=HOR_SEC_MATERIA) HOR_SEC_MATERIA",
 											"HOR_FECHAINGRESO",
-											"to_char(HOR_HORAINICIO,'DD-MM-YYY HH24:MI:SS') HOR_HORAINICIO",
-                                            "to_char(HOR_HORAFIN,'DD-MM-YYY HH24:MI:SS') HOR_HORAFIN",
-											"(CASE HOR_DIA
-											WHEN 'Lu' THEN 'Lunes'
-											WHEN 'Ma' THEN 'Martes'
-											WHEN 'Mi' THEN 'Miercoles'
-											WHEN 'Ju' THEN 'Jueves'
-											WHEN 'Vi' THEN 'Viernes'
-											WHEN 'Sa' THEN 'Sabado'
-											WHEN 'Do' THEN 'Domingo'
-											END) HOR_DIA",
+											"HOR_HORAINICIO",
+                                            "HOR_HORAFIN",
+											"HOR_DIA",
 											"HOR_RESPONSABLE",
 											"HOR_ESTADO");
 			  $datos->campos = array( "ROWNUM",
@@ -53,8 +45,8 @@ class Mhorario extends CI_Model {
                 HOR_SEC_PERSONA,
                 HOR_SEC_MATERIA,
                 HOR_FECHAINGRESO,
-                to_char(HOR_HORAINICIO,'DD-MM-YYY HH24:MI:SS') HOR_HORAINICIO,
-                to_char(HOR_HORAFIN,'DD-MM-YYY HH24:MI:SS') HOR_HORAFIN,
+                HOR_HORAINICIO,
+                HOR_HORAFIN,
                 HOR_DIA,
                 HOR_RESPONSABLE,
                 HOR_ESTADO
@@ -86,14 +78,25 @@ class Mhorario extends CI_Model {
 			oci_free_statement($stmt);            
             $HOR_FECHAINGRESO="TO_DATE('".$nsol[0]."','MM/DD/YYYY HH24:MI:SS')";
             $HOR_RESPONSABLE= $this->session->userdata('US_CODIGO');
-            $HOR_HORAINICIO= "TO_DATE('".$nsol[0]."','MM/DD/YYYY HH24:MI:SS')";
-            $HOR_HORAFIN= "TO_DATE('".$nsol[0]."','MM/DD/YYYY HH24:MI:SS')";
 		
 			//VARIABLES DE INGRESO
 			
 			$HOR_SEC_PERSONA=$this->input->post('persona');
             $HOR_SEC_MATERIA=prepCampoAlmacenar($this->input->post('materia'));
-            $HORA_INICIO=prepCampoAlmacenar($this->input->post('HOR_HORAINICIO')); 
+            
+            $HORA_INICIO=prepCampoAlmacenar($this->input->post('HORA_INICIO'));
+            $MINUTO_INICIO=prepCampoAlmacenar($this->input->post('MINUTO_INICIO'));
+            if(!empty($HORA_INICIO) and !empty($MINUTO_INICIO)){
+                $HOR_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":".$MINUTO_INICIO);
+            }elseif(!empty($HORA_INICIO)){
+                $HOR_HORAINICIO = prepCampoAlmacenar("00:".$MINUTO_INICIO);
+            }elseif(!empty($MINUTO_INICIO)){
+                $HOR_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":00");
+            }else{
+                $HOR_HORAINICIO = prepCampoAlmacenar("00:00");
+            }    
+            
+            
             $HORA_FIN=prepCampoAlmacenar($this->input->post('HOR_HORAFIN'));
             $HOR_DIA=prepCampoAlmacenar($this->input->post('dia'));	
         

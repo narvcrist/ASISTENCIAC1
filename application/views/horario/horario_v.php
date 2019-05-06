@@ -24,7 +24,8 @@
 							Hora Inicio
 						</th>
 						<td>
-						<input type="text" style="width:150px;" name="HOR_HORAINICIO" id="HOR_HORAINICIO" value="<?php echo !empty($sol->HOR_HORAINICIO) ? prepCampoMostrar($sol->HOR_HORAINICIO) : null ;?>" /> 
+						<input type="number" min="0" step="1" max="24" style="width:50px;" name="HORA_INICIO" id="HORA_INICIO" value="<?php echo !empty($sol->HORA_INICIO) ? prepCampoMostrar($sol->HORA_INICIO) : 0 ;?>" /> :
+						<input type="number" min="0" step="1" max="59" style="width:50px;" name="MINUTO_INICIO" id="MINUTO_INICIO" value="<?php echo !empty($sol->MINUTO_INICIO) ? prepCampoMostrar($sol->MINUTO_INICIO) : 0 ;?>" /> 
 						</td>
 						<th>
 							Hora fin
