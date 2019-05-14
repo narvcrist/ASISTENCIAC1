@@ -187,6 +187,7 @@ class Mhorario extends CI_Model {
                      WHERE HOR_SECUENCIAL=$HOR_SECUENCIAL";
                 $this->db->query($sql);
                //print_r($sql);
+               
         $HOR_SECUENCIAL=$this->db->query("select max(HOR_SECUENCIAL) SECUENCIAL from HORARIO")->row()->SECUENCIAL;
 		 echo json_encode(array("cod"=>$HOR_SECUENCIAL,"numero"=>$HOR_SECUENCIAL,"mensaje"=>"Horario: ".$HOR_SECUENCIAL.", editado con éxito"));    
     } 

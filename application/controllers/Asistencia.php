@@ -28,16 +28,25 @@ class Asistencia extends CI_Controller{
             //funcion para dar los valores a la cabecera tanto en nuevo, como al momento de editar
             function datos($sol,$accion){
                 if ($accion=='n') {   
-                    $datos['combo_persona']=$this->mvarios->cmb_persona(null," style='width:400px;' id='ASIS_SEC_PERSONA'");
-                    $datos['combo_horario']=$this->mvarios->cmb_horario(null," style='width:400px;' id='ASIS_SEC_HORARIO'");
+                    $datos['combo_persona']=$this->mvarios->cmb_persona(null," style='width:350px;' id='ASIS_SEC_PERSONA'");
+                    $datos['combo_horario']=$this->mvarios->cmb_horario(null," style='width:100px;' id='ASIS_SEC_HORARIO'");
 
                     //$datos=null;
                 } else {
                     $ASIS_SEC_PERSONA=$sol->ASIS_SEC_PERSONA;
-                    $datos['combo_persona']=$this->mvarios->cmb_persona($ASIS_SEC_PERSONA," style='width:400px;' id='ASIS_SEC_PERSONA'");
-                  
+                    $datos['combo_persona']=$this->mvarios->cmb_persona($ASIS_SEC_PERSONA," style='width:350px;' id='ASIS_SEC_PERSONA'");
                     $ASIS_SEC_HORARIO=$sol->ASIS_SEC_HORARIO;
-                    $datos['combo_horario']=$this->mvarios->cmb_horario($ASIS_SEC_HORARIO," style='width:400px;' id='ASIS_SEC_HORARIO'");
+                    $datos['combo_horario']=$this->mvarios->cmb_horario($ASIS_SEC_HORARIO," style='width:100px;' id='ASIS_SEC_HORARIO'");
+                    
+                    $HORAINICIO=$sol->ASIS_HORAINICIO;
+                    $HORAINICIOARRAY=explode(':',$HORAINICIO);
+                    $sol->HORA_INICIO=$HORAINICIOARRAY[0];
+                    $sol->MINUTO_INICIO=$HORAINICIOARRAY[1];
+
+                    $HORAFIN=$sol->ASIS_HORAFIN;
+                    $HORAFINARRAY=explode(':',$HORAFIN);
+                    $sol->HORA_FIN=$HORAFINARRAY[0];
+                    $sol->MINUTO_FIN=$HORAFINARRAY[1];
                     //$datos=null;
                 }
                return($datos);

@@ -3,7 +3,7 @@ jQuery(document).ready(function(){
     
     //var aprobador="<?php echo $aprobador; ?>";
     
-	//Evevnto para llegar el Grid de los datos a presentar
+	//Evento para llegar el Grid de los datos a presentar
     jQuery("#itemperxjor").jqGrid({
           url:"perxjor/getdatosItems",
           datatype: "json",
@@ -47,7 +47,7 @@ $("#agr_perxjor").jMostrarNoGrid({
             idButton:"#agr_perxjor",
             errorMens:"No se puede mostrar el formulario.",
             url: "perxjor/nuevaPerxjor/",
-            titulo: "Agregar una Jornada para la Persona",
+            titulo: "Agregar Estudiante por Jornada",
             alto:900,
             ancho: 1024,
             posicion: "top",
@@ -69,7 +69,7 @@ $("#edit_perxjor").jMostrarNoGrid({
 	        idButton:"#edit_perxjor",
 	        errorMens:"",
 	        url: "perxjor/verPerxjor/e",
-	        titulo: "Editar perxjor",
+	        titulo: "Editar Estudiante por Jornada",
               //  alto:900,
 	        ancho:1024,
 	        posicion: "top",
@@ -97,7 +97,7 @@ $("#ver_perxjor").jMostrarNoGrid({
 	        idButton:"#ver_perxjor",
 	        errorMens:"",
 	        url: "perxjor/verPerxjor/v",
-	        titulo: "Ver perxjor",
+	        titulo: "Ver Estudiante por Jornada",
               //  alto:900,
 	        ancho:1024,
 	        posicion: "top",
@@ -137,7 +137,7 @@ $("#ver_perxjor").jMostrarNoGrid({
 	        idButton:"#anular_perxjor",
 	        errorMens:"",
 	        url: "perxjor/verPerxjor/x",
-	        titulo: "Eliminar perxjor",
+	        titulo: "Eliminar Estudiante por Jornada",
 	        ancho:1024,
 	        posicion: "top",
 	        showText:true,

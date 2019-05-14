@@ -12,11 +12,11 @@ jQuery(document).ready(function(){
           colModel:[
 					{name:'COLUMNAS',index:'COLUMNAS',align:"center",width:30,hidden:false},
                     {name:'HOR_SECUENCIAL',index:'HOR_SECUENCIAL',align:"center",width:60},
-                    {name:'HOR_SEC_PERSONA',index:'HOR_SEC_PERSONA',align:"center", width:250},
-                    {name:'HOR_SEC_MATERIA',index:'HOR_SEC_MATERIA',align:"center", search:false, width:300},
+                    {name:'HOR_SEC_PERSONA',index:'HOR_SEC_PERSONA',align:"center", width:200},
+                    {name:'HOR_SEC_MATERIA',index:'HOR_SEC_MATERIA',align:"center", search:false, width:200},
 					{name:'HOR_FECHAINGRESO',index:'HOR_FECHAINGRESO',align:"center",  width:80},
-					{name:'HOR_HORAINICIO',index:'HOR_HORAINICIO',align:"center",  width:150},
-                    {name:'HOR_HORAFIN',index:'HOR_HORAFIN',align:"center",  width:150},					
+					{name:'HOR_HORAINICIO',index:'HOR_HORAINICIO',align:"center",  width:100},
+                    {name:'HOR_HORAFIN',index:'HOR_HORAFIN',align:"center",  width:100},					
 					{name:'HOR_DIA',index:'HOR_DIA', width:100,align:"center"},
 					{name:'HOR_RESPONSABLE',index:'HOR_RESPONSABLE', width:100,align:"center"},
 					{name:'HOR_ESTADO',index:'HOR_ESTADO',searchable:false, width:40,align:"center", edittype:'select', formatter:'select', editoptions:{value:"0:<span class='ui-icon ui-icon-circle-check ui-icon-extra'>Activo</span>;1:<span class='ui-icon ui-icon-circle-close ui-icon-extra'>Pasivo</span>"}}

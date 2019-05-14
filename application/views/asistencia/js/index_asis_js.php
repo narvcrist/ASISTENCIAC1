@@ -11,17 +11,14 @@ jQuery(document).ready(function(){
           colModel:[
 					{name:'COLUMNAS',index:'COLUMNAS',align:"center",width:30,hidden:false},
                     {name:'ASIS_SECUENCIAL',index:'ASIS_SECUENCIAL',align:"center",width:60},
-                    {name:'ASIS_SEC_PERSONA',index:'ASIS_PERSONA',align:"center",  width:250},
-					{name:'ASIS_SEC_HORARIO',index:'ASIS_SEC_HORARIO',align:"center", width:350},
-					{name:'ASIS_HORAINICIO',index:'ASIS_HORAINICIO',align:"center",  width:100},					
-					{name:'ASIS_HORAFIN',index:'ASIS_HORAFIN', width:100,align:"center"},
+                    {name:'ASIS_SEC_PERSONA',index:'ASIS_PERSONA',align:"center",  width:200},
+					{name:'ASIS_SEC_HORARIO',index:'ASIS_SEC_HORARIO',align:"center", width:100},
+					{name:'ASIS_HORAINICIO',index:'ASIS_HORAINICIO',align:"center",  width:50},					
+					{name:'ASIS_HORAFIN',index:'ASIS_HORAFIN', width:50,align:"center"},
 					{name:'ASIS_FECHAINGRESO',index:'ASIS_FECHAINGRESO', width:100,align:"center"},
                     {name:'ASIS_RESPONSABLE',index:'ASIS_RESPONSABLE', width:100,align:"center"},
-					{name:'ASIS_ESTADO',index:'ASIS_ESTADO',searchable:false, width:40,align:"center", edittype:'select', formatter:'select', 
-                    editoptions:{value:"0:
-                    <span class='ui-icon ui-icon-circle-check ui-icon-extra'>Activo</span>;1:
-                    <span class='ui-icon ui-icon-circle-close ui-icon-extra'>Pasivo</span>"}
-                    }],
+					{name:'ASIS_ESTADO',index:'ASIS_ESTADO',searchable:false, width:40,align:"center", edittype:'select', formatter:'select', editoptions:{value:"0:<span class='ui-icon ui-icon-circle-check ui-icon-extra'>Activo</span>;1:<span class='ui-icon ui-icon-circle-close ui-icon-extra'>Pasivo</span>"}}
+					],
                 rowNum:50,
         rowList : [50,100,200,800],
         pager: '#aitemasis',

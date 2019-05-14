@@ -1,26 +1,16 @@
-<div id="accordion">
-  
-        <form id="fhorario">
+<div id="accordion">  
+        <form id="fjornada">
             <div id="cabecera">
-            <table width="99%" id="thorario" class="formDialog">    
+            <table width="99%" id="tjornada" class="formDialog">    
+			
 					<tr>
-						<th>
-							Persona
+					    <th>
+							Jornada
 						</th>
-						<td colspan=10>
-                           <?php echo $combo_persona; ?>
-						</td>
-					</tr>
-					<tr>
-						<th>   
-							Materia
-						</th>
-                        <td colspan=10>
-							<?php echo $combo_materia; ?>	
-						</td>
-					</tr>
-					<tr> 
-						<th>
+                        <td>
+                            <?php echo $combo_jornada; ?>
+                        </td>
+                    	<th>
 							Hora Inicio
 						</th>
 						<td>
@@ -34,23 +24,17 @@
 						<input type="number" min="0" step="1" max="24" style="width:50px;" name="HORA_FIN" id="HORA_FIN" value="<?php echo !empty($sol->HORA_FIN) ? prepCampoMostrar($sol->HORA_FIN) : 0 ;?>" /> :
 						<input type="number" min="0" step="1" max="59" style="width:50px;" name="MINUTO_FIN" id="MINUTO_FIN" value="<?php echo !empty($sol->MINUTO_FIN) ? prepCampoMostrar($sol->MINUTO_FIN) : 0 ;?>" />  
                         </td>
-						<th>
-							Día
-						</th>
-                        <td colspan=10>
-							<?php echo $combo_dia; ?>	
-						</td>
+						
                     </tr>
-                    
 						<?php if($accion=='n'|$accion=='e') : ?>                    
-                            
                              <td align="center" colspan="6" class="noclass">
-                                <button title="Verifique la información antes de guardar." id="co_grabar" type="submit" ><img src="./imagenes/guardar.png" width="17" height="17"/>Grabar Horario</button>
+                                <button title="Verifique la información antes de guardar." id="co_grabar" type="submit" ><img src="./imagenes/guardar.png" width="17" height="17"/>Grabar Jornada</button>
                              </td>
                     
-						<?php endif; ?>	
-            </table>
+						<?php endif; ?>
+						
+                </table>
             </div>
-            <input type="hidden"  name="HOR_SECUENCIAL" id="HOR_SECUENCIAL" value="<?php echo !empty($sol->HOR_SECUENCIAL) ? prepCampoMostrar($sol->HOR_SECUENCIAL) : 0 ; ?>"  />
+            <input type="hidden"  name="JOR_SECUENCIAL" id="JOR_SECUENCIAL" value="<?php echo !empty($sol->JOR_SECUENCIAL) ? prepCampoMostrar($sol->JOR_SECUENCIAL) : 0 ; ?>"  />
         </form>
 </div>

@@ -49,17 +49,29 @@ class Horario extends CI_Controller{
 	function datos($sol,$accion){
         if ($accion=='n') {
             $datos['combo_persona']=$this->mvarios->cmb_persona(null," style='width:800px;' id='HOR_SEC_PERSONA'");
-            $datos['combo_materia']=$this->mvarios->cmb_materia(null,null," style='width:800px;' id='HOR_SEC_MATERIA'");
-			$datos['combo_dia']=$this->cmb_dia(null," style='width:100px;' id='HOR_DIA'");
+            $datos['combo_materia']=$this->mvarios->cmb_materia(null," style='width:800px;' id='HOR_SEC_MATERIA'");
+            $datos['combo_dia']=$this->cmb_dia(null," style='width:100px;' id='HOR_DIA'");
             //$datos=null;
 		} else {
             $HOR_SEC_PERSONA=$sol->HOR_SEC_PERSONA;
             $datos['combo_persona']=$this->mvarios->cmb_persona($HOR_SEC_PERSONA," style='width:800px;' id='HOR_SEC_PERSONA'");  
-            $materia=$sol->HOR_SEC_MATERIA;
-            $datos['combo_materia']=$this->mvarios->cmb_materia($materia,$sol->HOR_SEC_MATERIA," style='width:800px;' id='HOR_SEC_MATERIA'");
+            $HOR_SEC_MATERIA=$sol->HOR_SEC_MATERIA;
+            $datos['combo_materia']=$this->mvarios->cmb_materia($HOR_SEC_MATERIA,"style='width:800px;' id='HOR_SEC_MATERIA'");
+            
+            $HORAINICIO=$sol->HOR_HORAINICIO;
+            $HORAINICIOARRAY=explode(':',$HORAINICIO);
+            $sol->HORA_INICIO=$HORAINICIOARRAY[0];
+            $sol->MINUTO_INICIO=$HORAINICIOARRAY[1];
+
+            $HORAFIN=$sol->HOR_HORAFIN;
+            $HORAFINARRAY=explode(':',$HORAFIN);
+            $sol->HORA_FIN=$HORAFINARRAY[0];
+            $sol->MINUTO_FIN=$HORAFINARRAY[1];
+
             $dia=$sol->HOR_DIA;
-			$datos['combo_dia']=$this->cmb_dia($dia,$sol->HOR_DIA," style='width:100px;' id='HOR_DIA'");
-			//$datos=null;
+            $datos['combo_dia']=$this->cmb_dia($dia,$sol->HOR_DIA," style='width:100px;' id='HOR_DIA'");
+            //$datos=null;
+			
         }
         return($datos);
      }
@@ -68,18 +80,18 @@ class Horario extends CI_Controller{
     function  cmb_dia($tipo = null, $attr = null) {
         $output = array();
         $output[null] = "Día....";
-        $output['Lu'] = "Lunes";
-        $output['Ma'] = "Martes";
-        $output['Mi'] = "Miércoles";
-        $output['Ju'] = "Jueves";
-        $output['Vi'] = "Viernes";
-        $output['Sa'] = "Sábado";
-        $output['Do'] = "Domingo";
+        $output['Lunes'] = "Lunes";
+        $output['Martes'] = "Martes";
+        $output['Miércoles'] = "Miércoles";
+        $output['Jueves'] = "Jueves";
+        $output['Viernes'] = "Viernes";
+        $output['Sábado'] = "Sábado";
+        $output['Domingo'] = "Domingo";
         
         return form_dropdown('dia', $output, $tipo, $attr);
     }	
 	 
-	//Administra las fonciones de nuevo y editar en una persona
+	//Administra las funciones de nuevo y editar horario
     function admHorario($accion){
         switch($accion){
             case 'n':
@@ -90,7 +102,7 @@ class Horario extends CI_Controller{
                 break;
         }        
     }
-	//Cambia de estado a pasivo a un horario
+	//Cambia de estado a pasivo un horario
     function anulartoda(){
          $HOR_SECUENCIAL=$this->input->post('NUMERO');
             $SQL="update HORARIO set HOR_ESTADO=1 where HOR_SECUENCIAL=$HOR_SECUENCIAL"; 

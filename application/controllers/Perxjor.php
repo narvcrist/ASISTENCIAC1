@@ -48,15 +48,15 @@ class Perxjor extends CI_Controller{
 	//funcion para dar los valores a la cabecera tanto en nuevo, como al momento de editar
 	function datos($sol,$accion){
         if ($accion=='n') {
-            $datos['combo_jornada']=$this->mvarios->cmb_jornada(null," style='width:80%;' id='PERXJOR_SEC_JORNADA'");
-            $datos['combo_persona']=$this->mvarios->cmb_persona(null," style='width:60%;' id='PERXJOR_SEC_PERSONA'");
+            $datos['combo_jornada']=$this->mvarios->cmb_jornada(null," style='width:350px;' id='PERXJOR_SEC_JORNADA'");
+            $datos['combo_persona']=$this->mvarios->cmb_persona(null," style='width:350px;' id='PERXJOR_SEC_PERSONA'");
 			//$datos=null;		
 		} else {
 			$PERXJOR_SEC_JORNADA=$sol->PERXJOR_SEC_JORNADA;			
-			$datos['combo_jornada'] = $this->mvarios->cmb_jornada($PERXJOR_SEC_JORNADA,"style='width:80%;' id='PERXJOR_SEC_JORNADA'");
+			$datos['combo_jornada'] = $this->mvarios->cmb_jornada($PERXJOR_SEC_JORNADA,"style='width:350px;' id='PERXJOR_SEC_JORNADA'");
 
             $PERXJOR_SEC_PERSONA=$sol->PERXJOR_SEC_PERSONA;			
-			$datos['combo_persona'] = $this->mvarios->cmb_persona($PERXJOR_SEC_PERSONA,"style='width:60%;' id='PERXJOR_SEC_PERSONA'");
+			$datos['combo_persona'] = $this->mvarios->cmb_persona($PERXJOR_SEC_PERSONA,"style='width:350px;' id='PERXJOR_SEC_PERSONA'");
 
         }
         return($datos);

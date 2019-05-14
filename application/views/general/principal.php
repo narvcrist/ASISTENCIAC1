@@ -48,14 +48,22 @@
 				<div id="c_menu_opciones" class="grid_10" style="border: 1px solid #CCC; margin: 0em 0em 0em -18.5em;  width:115%; height:auto;">
 					<ul id="menu_opciones">
 						<?php if ($this->lib_usuarios->getAccesoSeccion($this->session->userdata('US_CODIGO'),'ADM')==1){?>
+						
 							<li><a href="#">Administración</a> 
 								<ul>
 									<li> <a id="e_estudiante" title="Administración de Estudiantes" name="persona/index"  class="cabecera-links" href="#">Estudiantes</a></li>
-									<li> <a id="e_horario" title="Administración de Horarios" name="horario/index"  class="cabecera-links" href="#">Horarios</a></li>
-									<li> <a id="e_asistencia" title="Administración de Asistencias" name="asistencia/index"  class="cabecera-links" href="#">Asistencia</a></li>
-									<li> <a id="e_perxjor" title="Administración de persona por jornada" name="perxjor/index"  class="cabecera-links" href="#">Personas por jornadas</a></li>
+									<li> <a id="e_jornada" title="Administración de Jornadas" name="jornada/index"  class="cabecera-links" href="#">Jornada</a></li>
+								  <li> <a id="e_asistencia" title="Administración de Asistencias" name="asistencia/index"  class="cabecera-links" href="#">Asistencia</a></li>
+									<li> <a id="e_perxjor" title="Administración de Jornada Por Estudiante" name="perxjor/index"  class="cabecera-links" href="#">Estudiante Por Jornada </a></li>
 								</ul>
-							</li>	
+							</li>
+							<li><a title="Administración Parametros de Estudios" href="#">Administración Estudios</a> 
+								<ul>
+									<li> <a id="e_materia" title="Administración de Materias" name="materia/index"  class="cabecera-links" href="#">Materias</a></li>
+									<li> <a id="e_cronograma" title="Administración de Jornada Por Materia" name="jorxmat/index"  class="cabecera-links" href="#">Jornada Por Materias</a></li>
+									<li> <a id="e_tipoCalificacion" title="Administración de Tipo de Horarios" name="horario/index"  class="cabecera-links" href="#">Horarios</a></li>
+								</ul>
+							</li>			
 						<?php } ?>
 						<li> <a id="e_salir" title="Cierre de Sesión" class="titular" href="general/inicio/salir"><span class="titular"><font color="#D32525"><b>Salir</b></font></span></a></li>
 					</ul>

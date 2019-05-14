@@ -19,7 +19,7 @@ class Masistencia extends CI_Model {
                                             FROM PERSONA 
                                             WHERE PER_SECUENCIAL = ASIS_SEC_PERSONA)
                                             ASIS_SEC_PERSONA",
-                                            "(SELECT CONCAT(CONCAT(CONCAT(HOR_DIA,' '), HOR_HORAINICIO),HOR_FIN)
+                                            "(SELECT CONCAT(CONCAT(CONCAT(HOR_DIA,' '), HOR_HORAINICIO),HOR_HORAFIN)
                                             FROM HORARIO 
                                             WHERE HOR_SECUENCIAL = ASIS_SEC_HORARIO)
                                             ASIS_SEC_HORARIO",
@@ -48,8 +48,8 @@ class Masistencia extends CI_Model {
        ASIS_SECUENCIAL,
        ASIS_SEC_PERSONA,
        ASIS_SEC_HORARIO,
-       to_char(ASIS_HORAINICIO,'DD-MM-YYY HH24:MI:SS') ASIS_HORAINICIO,
-	   to_char(ASIS_HORAFIN,'DD-MM-YYY HH24:MI:SS') ASIS_HORAFIN,
+       ASIS_HORAINICIO,
+	   ASIS_HORAFIN,
        ASIS_FECHAINGRESO,
        ASIS_RESPONSABLE,
        ASIS_ESTADO
@@ -68,8 +68,7 @@ class Masistencia extends CI_Model {
                       FROM ASISTENCIA WHERE ASIS_SECUENCIAL=$numero";
                          $sol=$this->db->query($sql)->row();
 						}
-						
-          return $sol;
+	      return $sol;
 		}
 
 	//funcion para crear un nuevo reporte o cabecera
@@ -80,31 +79,38 @@ class Masistencia extends CI_Model {
 			oci_execute($stmt);
 			$nsol=oci_fetch_row($stmt);
 			oci_free_statement($stmt);            
-           
             $ASIS_RESPONSABLE=$this->session->userdata('US_CODIGO');
 			$ASIS_FECHAINGRESO="TO_DATE('".$nsol[0]."','DD/MM/YYYY HH24:MI:SS')";
-			$ASIS_HORAINICIO="TO_DATE('".$HORAINICIO."','DD/MM/YYYY HH24:MI:SS')";
-			$ASIS_HORAFIN="TO_DATE('".$HORAFIN."','DD/MM/YYYY HH24:MI:SS')";
 			
 			//VARIABLES DE INGRESO
             $ASIS_SEC_PERSONA=$this->input->post('persona');						
             $ASIS_SEC_HORARIO=$this->input->post('horario');
-            $HORAINICIO =prepCampoAlmacenar($this->input->post('ASIS_HORAINICIO'));	
-            $HORAFIN =prepCampoAlmacenar($this->input->post('ASIS_HORAFIN'));	
+            $HORA_INICIO=prepCampoAlmacenar($this->input->post('HORA_INICIO'));
+            $MINUTO_INICIO=prepCampoAlmacenar($this->input->post('MINUTO_INICIO'));
+            if(!empty($HORA_INICIO) and !empty($MINUTO_INICIO)){
+                $ASIS_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":".$MINUTO_INICIO);
+            }elseif(!empty($HORA_INICIO)){
+                $ASIS_HORAINICIO = prepCampoAlmacenar("00:".$MINUTO_INICIO);
+            }elseif(!empty($MINUTO_INICIO)){
+                $ASIS_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":00");
+            }else{
+                $ASIS_HORAINICIO = prepCampoAlmacenar("00:00");
+            }    
+            $HORA_FIN=prepCampoAlmacenar($this->input->post('HORA_FIN'));
+            $MINUTO_FIN=prepCampoAlmacenar($this->input->post('MINUTO_FIN'));
+            if(!empty($HORA_FIN) and !empty($MINUTO_FIN)){
+                $ASIS_HORAFIN = prepCampoAlmacenar($HORA_FIN.":".$MINUTO_FIN);
+            }elseif(!empty($HORA_FIN)){
+                $ASIS_HORAFIN = prepCampoAlmacenar("00:".$MINUTO_FIN);
+            }elseif(!empty($MINUTO_FIN)){
+                $ASIS_HORAFIN = prepCampoAlmacenar($HORA_FIN.":00");
+            }else{
+                $ASIS_HORAFIN = prepCampoAlmacenar("00:00");
+            }
             
-            				
-			
-			/*if (!empty($HORAINICIO) and !empty($HORAFIN)){
-				$ASIS_HORAINICIO ="TO_DATE('$HORAINICIO 00:00:00', 'dd/mm/yy HH24:MI:SS')";
-				$ASIS_HORAFIN ="TO_DATE('$HORAFIN 23:59:59', 'dd/mm/yy HH24:MI:SS')";              
-			}else{
-				$ASIS_HORAINICIO =null;
-				$ASIS_HORAFIN = null;
-			}*/
-
             $sqlASISTENCIAVALIDA="select count(*) NUM_ASISTENCIA from asistencia
             WHERE ASIS_sec_persona='{$ASIS_SEC_PERSONA }'
-            and ASIS_sec_matricula='{$ASIS_SEC_HORARIO}'
+            and ASIS_SEC_HORARIO='{$ASIS_SEC_HORARIO}'
             and ASIS_ESTADO=0";
 			$NUM_ASISTENCIA =$this->db->query($sqlASISTENCIAVALIDA)->row()->NUM_ASISTENCIA ;
 			if($NUM_ASISTENCIA ==0){
@@ -119,8 +125,8 @@ class Masistencia extends CI_Model {
                       ASIS_ESTADO) VALUES(
                             $ASIS_SEC_PERSONA,
                             $ASIS_SEC_HORARIO,
-                            $ASIS_HORAINICIO,
-                            $ASIS_HORAFIN,
+                            '$ASIS_HORAINICIO',
+                            '$ASIS_HORAFIN',
                             $ASIS_FECHAINGRESO,
                             '$ASIS_RESPONSABLE',
 						    0)";
@@ -131,7 +137,6 @@ class Masistencia extends CI_Model {
     }else{     
         echo json_encode(array("cod"=>1,"numero"=>1,"mensaje"=>"!!!...La asistencia Ya Existe...!!!"));
     }
-        
 }
     
 	//funcion para editar un registro selccionado
@@ -141,47 +146,40 @@ class Masistencia extends CI_Model {
 			//VARIABLES DE INGRESO
 			$ASIS_SEC_PERSONA=$this->input->post('persona');
             $ASIS_SEC_HORARIO=$this->input->post('horario');
-            $HORAINICIO =prepCampoAlmacenar($this->input->post('ASIS_HORAINICIO'));			
-            $ASIS_HORAINICIO="TO_DATE('".$HORAINICIO."','DD/MM/YYYY HH24:MI:SS')";
-            $HORAFIN =prepCampoAlmacenar($this->input->post('ASIS_HORAFIN'));
-            $ASIS_HORAFIN="TO_DATE('".$HORAFIN."','DD/MM/YYYY HH24:MI:SS')";		
-			
-			
-			$sqlREPETICION1="select ASIS_SECUENCIAL,ASIS_SEC_HORARIO 
-							from asistencia
-							where ASIS_SECUENCIAL='{$ASIS_SECUENCIAL}'
-							and ASIS_estado=0";
-			$repe1 =$this->db->query($sqlREPETICION1)->row();
-			
-			$sqlREPETICION2="select ASIS_SECUENCIAL,ASIS_SEC_HORARIO 
-							from asistencia
-							where ASIS_SEC_MATRICULA='{$ASIS_SEC_HORARIO}'
-							and ASIS_estado=0";
-			$repe2 =$this->db->query($sqlREPETICION2)->row();
+            $HORA_INICIO=prepCampoAlmacenar($this->input->post('HORA_INICIO'));
+            $MINUTO_INICIO=prepCampoAlmacenar($this->input->post('MINUTO_INICIO'));
+            if(!empty($HORA_INICIO) and !empty($MINUTO_INICIO)){
+                $ASIS_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":".$MINUTO_INICIO);
+            }elseif(!empty($HORA_INICIO)){
+                $ASIS_HORAINICIO = prepCampoAlmacenar("00:".$MINUTO_INICIO);
+            }elseif(!empty($MINUTO_INICIO)){
+                $ASIS_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":00");
+            }else{
+                $ASIS_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":".$MINUTO_INICIO);
+            }    
+            $HORA_FIN=prepCampoAlmacenar($this->input->post('HORA_FIN'));
+            $MINUTO_FIN=prepCampoAlmacenar($this->input->post('MINUTO_FIN'));
+            if(!empty($HORA_FIN) and !empty($MINUTO_FIN)){
+                $ASIS_HORAFIN = prepCampoAlmacenar($HORA_FIN.":".$MINUTO_FIN);
+            }elseif(!empty($HORA_FIN)){
+                $ASIS_HORAFIN = prepCampoAlmacenar("00:".$MINUTO_FIN);
+            }elseif(!empty($MINUTO_FIN)){
+                $ASIS_HORAFIN = prepCampoAlmacenar($HORA_FIN.":00");
+            }else{
+                $ASIS_HORAFIN = prepCampoAlmacenar($HORA_FIN.":".$MINUTO_FIN);
+            }
 
-			$sqlREPETICION="select count(*) NUM_REPETICION
-							from asistencia
-							where ASIS_SEC_MATRICULA='{$ASIS_SEC_HORARIO}'
-							and ASIS_estado=0";
-			$NUM_REPETICION =$this->db->query($sqlREPETICION)->row()->NUM_REPETICION;
-			
-		if(($repe1->ASIS_SECUENCIAL==$repe2->ASIS_SECUENCIAL) or ($NUM_REPETICION==0)){
-            
 				$sql="UPDATE ASISTENCIA SET
 							ASIS_SEC_PERSONA=$ASIS_SEC_PERSONA,
-							ASIS_SEC_MATRICULA=$ASIS_SEC_HORARIO,
-                            ASIS_HORAINICIO=$ASIS_HORAINICIO,
-							ASIS_HORAFIN=$ASIS_HORAFIN
+							ASIS_SEC_HORARIO=$ASIS_SEC_HORARIO,
+                            ASIS_HORAINICIO='$ASIS_HORAINICIO',
+							ASIS_HORAFIN='$ASIS_HORAFIN'
 							WHERE ASIS_SECUENCIAL=$ASIS_SECUENCIAL";
-	
 		$this->db->query($sql);
                //print_r($sql);
 		 $ASIS_SECUENCIAL=$this->db->query("select max(ASIS_SECUENCIAL) SECUENCIAL from ASISTENCIA")->row()->SECUENCIAL;
 		 echo json_encode(array("cod"=>$ASIS_SECUENCIAL,"numero"=>$ASIS_SECUENCIAL,"mensaje"=>"Asistencia: ".$ASIS_SECUENCIAL.", editado con éxito"));    
-	}else{     
-		 echo json_encode(array("cod"=>1,"numero"=>1,"mensaje"=>"!!!...La asistencia ya existe ...!!!"));
-                
-	}
+	
    }    
 }
 ?>
