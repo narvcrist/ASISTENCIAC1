@@ -19,8 +19,8 @@ class Mhorario extends CI_Model {
                                             HOR_SEC_PERSONA",
 											"(select MAT_NOMBRE FROM materia WHERE MAT_SECUENCIAL=HOR_SEC_MATERIA) HOR_SEC_MATERIA",
 											"HOR_FECHAINGRESO",
-											"HOR_HORAINICIO",
-                                            "HOR_HORAFIN",
+											"(REPLACE(TO_CHAR(HOR_HORAINICIO,'00.90'),'.',':')) HOR_HORAINICIO",
+											"(REPLACE(TO_CHAR(HOR_HORAFIN,'00.90'),'.',':')) HOR_HORAFIN",
 											"HOR_DIA",
 											"HOR_RESPONSABLE",
 											"HOR_ESTADO");
@@ -84,30 +84,39 @@ class Mhorario extends CI_Model {
             $HOR_SEC_MATERIA=prepCampoAlmacenar($this->input->post('materia'));
             $HORA_INICIO=prepCampoAlmacenar($this->input->post('HORA_INICIO'));
             $MINUTO_INICIO=prepCampoAlmacenar($this->input->post('MINUTO_INICIO'));
-            if(!empty($HORA_INICIO) and !empty($MINUTO_INICIO)){
-                $HOR_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":".$MINUTO_INICIO);
-            }elseif(!empty($HORA_INICIO)){
-                $HOR_HORAINICIO = prepCampoAlmacenar("00:".$MINUTO_INICIO);
-            }elseif(!empty($MINUTO_INICIO)){
-                $HOR_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":00");
-            }else{
-                $HOR_HORAINICIO = prepCampoAlmacenar("00:00");
-            }    
-            $HORA_FIN=prepCampoAlmacenar($this->input->post('HORA_FIN'));
-            $MINUTO_FIN=prepCampoAlmacenar($this->input->post('MINUTO_FIN'));
-            if(!empty($HORA_FIN) and !empty($MINUTO_FIN)){
-                $HOR_HORAFIN = prepCampoAlmacenar($HORA_FIN.":".$MINUTO_FIN);
-            }elseif(!empty($HORA_FIN)){
-                $HOR_HORAFIN = prepCampoAlmacenar("00:".$MINUTO_FIN);
-            }elseif(!empty($MINUTO_FIN)){
-                $HOR_HORAFIN = prepCampoAlmacenar($HORA_FIN.":00");
-            }else{
-                $HOR_HORAFIN = prepCampoAlmacenar("00:00");
-            }
-            $HOR_DIA=prepCampoAlmacenar($this->input->post('dia'));	
+            if($HORA_INICIO!=0){
+				$HORA_INICIO=$HORA_INICIO;
+			}else{
+				$HORA_INICIO=0;
+			}
+			
+			if($MINUTO_INICIO!=0){
+				$MINUTO_INICIO=$MINUTO_INICIO;
+			}else{
+				$MINUTO_INICIO=0;
+			}	
+			$HOR_HORAINICIO=$HORA_INICIO.".".$MINUTO_INICIO;
+			
+			//INGRESO HORAFINAL
+			$HORA_FIN=$this->input->post('HORA_FIN');
+			$MINUTO_FIN=$this->input->post('MINUTO_FIN');
+			if($HORA_FIN!=0){
+				$HORA_FIN=$HORA_FIN;
+			}else{
+				$HORA_FIN=0;
+			}
+			
+			if($MINUTO_FIN!=0){
+				$MINUTO_FIN=$MINUTO_FIN;
+			}else{
+				$MINUTO_FIN=0;
+			}	
+			$HOR_HORAFIN=$HORA_FIN.".".$MINUTO_FIN;
+			
+			$HOR_DIA=prepCampoAlmacenar($this->input->post('dia'));
         	$sqlHORARIOVALIDA="select count(*) NUM_HORARIO from HORARIO WHERE HOR_SEC_PERSONA='{$HOR_SEC_PERSONA }' and HOR_ESTADO=0";
 			$NUM_HORARIO =$this->db->query($sqlHORARIOVALIDA)->row()->NUM_HORARIO ;
-            
+
             //validación...
 			$sqlREPETICION="select count(*) NUM_HORARIO
                 from HORARIO
@@ -131,8 +140,8 @@ class Mhorario extends CI_Model {
                     $HOR_SEC_PERSONA,
                     $HOR_SEC_MATERIA,
                     $HOR_FECHAINGRESO,
-                    '$HOR_HORAINICIO',
-                    '$HOR_HORAFIN',
+                    $HOR_HORAINICIO,
+                    $HOR_HORAFIN,
                     '$HOR_DIA',
                     '$HOR_RESPONSABLE', 
                     0)";
@@ -155,34 +164,45 @@ class Mhorario extends CI_Model {
             $HOR_SEC_MATERIA=$this->input->post('materia');	
             $HORA_INICIO=prepCampoAlmacenar($this->input->post('HORA_INICIO'));
             $MINUTO_INICIO=prepCampoAlmacenar($this->input->post('MINUTO_INICIO'));
-            if(!empty($HORA_INICIO) and !empty($MINUTO_INICIO)){
-                $HOR_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":".$MINUTO_INICIO);
-            }elseif(!empty($HORA_INICIO)){
-                $HOR_HORAINICIO = prepCampoAlmacenar("00:".$MINUTO_INICIO);
-            }elseif(!empty($MINUTO_INICIO)){
-                $HOR_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":00");
-            }else{
-                $HOR_HORAINICIO = prepCampoAlmacenar($HORA_INICIO.":".$MINUTO_INICIO);
-            }    
-            $HORA_FIN=prepCampoAlmacenar($this->input->post('HORA_FIN'));
-            $MINUTO_FIN=prepCampoAlmacenar($this->input->post('MINUTO_FIN'));
-            if(!empty($HORA_FIN) and !empty($MINUTO_FIN)){
-                $HOR_HORAFIN = prepCampoAlmacenar($HORA_FIN.":".$MINUTO_FIN);
-            }elseif(!empty($HORA_FIN)){
-                $HOR_HORAFIN = prepCampoAlmacenar("00:".$MINUTO_FIN);
-            }elseif(!empty($MINUTO_FIN)){
-                $HOR_HORAFIN = prepCampoAlmacenar($HORA_FIN.":00");
-            }else{
-                $HOR_HORAFIN = prepCampoAlmacenar($HORA_FIN.":".$MINUTO_FIN);
-            }			
-            $HOR_DIA=prepCampoAlmacenar($this->input->post('dia'));		
+            if($HORA_INICIO!=0){
+				$HORA_INICIO=$HORA_INICIO;
+			}else{
+				$HORA_INICIO=0;
+			}
+			
+			if($MINUTO_INICIO!=0){
+				$MINUTO_INICIO=$MINUTO_INICIO;
+			}else{
+				$MINUTO_INICIO=0;
+			}	
+			$HOR_HORAINICIO=$HORA_INICIO.".".$MINUTO_INICIO;
+			
+			//INGRESO HORAFINAL
+			$HORA_FIN=$this->input->post('HORA_FIN');
+			$MINUTO_FIN=$this->input->post('MINUTO_FIN');
+			if($HORA_FIN!=0){
+				$HORA_FIN=$HORA_FIN;
+			}else{
+				$HORA_FIN=0;
+			}
+			
+			if($MINUTO_FIN!=0){
+				$MINUTO_FIN=$MINUTO_FIN;
+			}else{
+				$MINUTO_FIN=0;
+			}	
+			$HOR_HORAFIN=$HORA_FIN.".".$MINUTO_FIN;
+			
+			$HOR_DIA=prepCampoAlmacenar($this->input->post('dia'));
+        	$sqlHORARIOVALIDA="select count(*) NUM_HORARIO from HORARIO WHERE HOR_SEC_PERSONA='{$HOR_SEC_PERSONA }' and HOR_ESTADO=0";
+			$NUM_HORARIO =$this->db->query($sqlHORARIOVALIDA)->row()->NUM_HORARIO ;
             
 	
 				$sql="UPDATE HORARIO SET
 							HOR_SEC_PERSONA=$HOR_SEC_PERSONA,
                             HOR_SEC_MATERIA=$HOR_SEC_MATERIA,
-							HOR_HORAINICIO='$HOR_HORAINICIO',
-                            HOR_HORAFIN='$HOR_HORAFIN',
+							HOR_HORAINICIO=$HOR_HORAINICIO,
+                            HOR_HORAFIN=$HOR_HORAFIN,
 							HOR_DIA='$HOR_DIA'
                      WHERE HOR_SECUENCIAL=$HOR_SECUENCIAL";
                 $this->db->query($sql);
